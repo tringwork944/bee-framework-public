@@ -1,0 +1,35 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# PHP/Node dependencies
+/vendor/
+/node_modules/
+
+# Storage runtime data
+/ung_dung/kho_luu/cache/*
+/ung_dung/kho_luu/phien/*
+/ung_dung/kho_luu/nhat_ky/*
+!/ung_dung/kho_luu/cache/.gitkeep
+!/ung_dung/kho_luu/phien/.gitkeep
+!/ung_dung/kho_luu/nhat_ky/.gitkeep
+/ung_dung/kho_luu/mo_dun/trang_thai.json
+
+# Public runtime data
+/cong_khai/tai_len/
+
+# Logs and temp
+*.log
+*.cache
+*.tmp
+
+# Build artifacts
+/dist/
+/build/
+
+# IDE/editor
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
