@@ -25,7 +25,7 @@ Bee Frame là một dự án PHP theo hướng mô đun, phù hợp để xây d
 ### 1. Clone repository
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/tringwork944/bee-framework-public
 cd bee-frame
 ```
 
