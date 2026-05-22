@@ -1,14 +1,20 @@
 # Bee Frame
 
-Bee Frame là một dự án PHP theo hướng mô đun, phù hợp để xây dựng các ứng dụng quản trị nội bộ và mở rộng tính năng theo từng khối chức năng. Repository public này tập trung vào cách cài đặt, cấu hình và vận hành cơ bản để người mới có thể tiếp cận nhanh.
+Bee Frame là một dự án PHP theo hướng mô đun, phù hợp để xây dựng các ứng dụng quản trị nội bộ và mở rộng chức năng theo từng khối nghiệp vụ. Phiên bản repository public này được trình bày theo hướng dễ tiếp cận cho người dùng và nhà phát triển mới, tập trung vào cài đặt, cấu hình cơ bản và vận hành an toàn.
+
+## Giới thiệu ngắn gọn
+
+Dự án cung cấp một nền tảng quản trị viết bằng PHP với cách tổ chức chức năng theo mô đun. Một số mô đun hệ thống cơ bản đã có sẵn để phục vụ đăng nhập, tổng quan, quản lý tài khoản và quản lý mô đun.
+
+README này chỉ trình bày ở mức sử dụng và triển khai cơ bản, không đi sâu vào các chi tiết lõi hoặc logic nội bộ của core.
 
 ## Tính năng chính
 
-- Tổ chức chức năng theo mô đun, dễ bổ sung hoặc mở rộng.
-- Có sẵn xác thực đăng nhập, tổng quan, quản lý tài khoản và quản lý mô đun.
-- Hỗ trợ bật, tắt, cài đặt và kiểm tra mô đun trong giao diện quản trị.
+- Tổ chức chức năng theo mô đun để dễ mở rộng.
+- Có sẵn đăng nhập, trang tổng quan và một số chức năng quản trị cơ bản.
+- Hỗ trợ quản lý vòng đời mô đun từ giao diện quản trị.
 - Hỗ trợ tải lên gói mô đun `.zip` nếu máy chủ có `ZipArchive`.
-- Sử dụng giao diện web có sẵn để đăng nhập và quản lý hệ thống.
+- Tách thư mục public web và phần mã nguồn ứng dụng để thuận tiện khi triển khai.
 
 ## Yêu cầu hệ thống
 
@@ -31,8 +37,8 @@ cd bee-frame
 
 ### 2. Cấu hình web server trỏ vào thư mục `cong_khai`
 
-- Document root/Web root cần trỏ đến thư mục `cong_khai/`.
-- Không trỏ trực tiếp web server vào root repository hoặc thư mục `ung_dung/`.
+- Web server cần trỏ document root vào `cong_khai/`.
+- Không nên public trực tiếp root repository hoặc thư mục `ung_dung/`.
 
 Ví dụ:
 
@@ -47,15 +53,15 @@ Tạo một database rỗng trên MySQL/MariaDB, ví dụ:
 CREATE DATABASE bee_frame CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-### 4. Tạo file cấu hình môi trường từ file mẫu
+### 4. Tạo file cấu hình môi trường
 
-Project đọc cấu hình từ file `.env` ở root repository.
+Project đọc cấu hình từ file `.env` tại root repository. Hãy tạo file cấu hình từ mẫu:
 
 ```bash
 cp .env.example .env
 ```
 
-Cập nhật các giá trị trong `.env` cho phù hợp môi trường:
+Sau đó cập nhật các giá trị trong `.env` theo môi trường của bạn:
 
 ```env
 UNG_DUNG_URL=http://localhost
@@ -70,13 +76,13 @@ DB_NGUOI_DUNG=root
 DB_MAT_KHAU=
 ```
 
-### 5. Nạp dữ liệu khởi tạo
+### 5. Khởi tạo dữ liệu
 
-Project hiện tại không dùng wizard cài đặt riêng. Để chạy đúng ngay, hãy import file:
+Project hiện sử dụng file dữ liệu mẫu để khởi tạo schema và dữ liệu ban đầu:
 
 `ung_dung/kho_luu/du_lieu_mau.sql`
 
-Đây là bộ schema và dữ liệu mẫu cần thiết để hệ thống khởi động và đăng nhập lần đầu.
+Hãy import file này vào database vừa tạo.
 
 ### 6. Phân quyền thư mục cần ghi
 
@@ -84,50 +90,46 @@ Project hiện tại không dùng wizard cài đặt riêng. Để chạy đúng
 
 - `ung_dung/kho_luu/tam/`
 
-Nếu bạn sử dụng tính năng tải lên mô đun `.zip`, hệ thống sẽ tạo thêm thư mục tạm con bên trong khu vực này.
+Thư mục này được dùng cho dữ liệu tạm, đặc biệt khi tải lên mô đun.
 
-### 7. Truy cập trình duyệt và đăng nhập
+### 7. Truy cập trình duyệt
 
 Sau khi cấu hình xong:
 
-- Mở trình duyệt đến trang chủ hoặc `/dang-nhap`
-- Đăng nhập tài khoản mẫu:
-  - Email: `admin@example.com`
-  - Mật khẩu: `password`
+- Truy cập domain hoặc local host đã cấu hình
+- Có thể mở trực tiếp `/dang-nhap` để vào màn hình đăng nhập
 
-Nên đổi mật khẩu ngay sau khi đăng nhập thành công nếu bạn dùng dữ liệu mẫu.
+Nếu bạn import dữ liệu mẫu, hệ thống sẽ có sẵn tài khoản quản trị mẫu phục vụ mục đích cài đặt thử nghiệm. Nên thay đổi hoặc thay thế dữ liệu này trước khi đưa vào môi trường thật.
 
 ### 8. Cài đặt hoặc bật mô đun nếu cần
 
-- Các mô đun hệ thống cần thiết đã được đồng bộ sẵn.
-- Với mô đun thông thường, vào menu `Mô đun` hoặc truy cập `/quan-ly-mo-dun`.
-- Nếu mô đun mới chỉ vừa được đưa vào source hoặc tải lên bằng file `.zip`, hãy thực hiện lần lượt:
+- Truy cập khu vực quản lý mô đun tại `/quan-ly-mo-dun`
+- Với mô đun mới được thêm vào source hoặc tải lên bằng `.zip`, hãy thực hiện:
   1. `Cài đặt`
   2. `Kích hoạt`
 
 ## Cấu hình cơ bản
 
-Project đang đọc trực tiếp file `.env` tại root repo. Các biến đang dùng gồm:
+Project hiện sử dụng file `.env` tại root repo. Các biến chính gồm:
 
 - `UNG_DUNG_URL`: URL cơ bản của ứng dụng.
 - `UNG_DUNG_DEBUG`: bật/tắt debug, nên để `false` khi public.
-- `UNG_DUNG_MUOI`: chuỗi bí mật nội bộ, cần đổi giá trị mặc định trước khi triển khai thật.
+- `UNG_DUNG_MUOI`: chuỗi bí mật nội bộ, nên thay đổi trước khi triển khai.
 - `DB_MAY_CHU`, `DB_CONG`, `DB_TEN`, `DB_BANG_MA`, `DB_NGUOI_DUNG`, `DB_MAT_KHAU`: cấu hình kết nối database.
 
 ## Chạy dự án
 
-- Nếu đã cấu hình web server dùng `cong_khai/`, chỉ cần truy cập domain/local host đã khai báo.
-- Nếu dùng môi trường local tự cài, hãy đảm bảo PHP và database đang hoạt động trước khi truy cập.
+Sau khi hoàn tất cấu hình web server, database và file `.env`, chỉ cần truy cập địa chỉ đã cấu hình để sử dụng hệ thống.
 
-Sau khi đăng nhập, hệ thống sẽ đưa bạn vào khu vực tổng quan và các chức năng quản trị có sẵn.
+Nếu môi trường cài đặt đúng, ứng dụng sẽ hiển thị màn hình đăng nhập và cho phép truy cập các chức năng quản trị tương ứng theo quyền tài khoản.
 
 ## Quản lý mô đun cơ bản
 
-- Thư mục mô đun nằm trong `ung_dung/mo_dun/`.
-- Có sẵn một mô đun mẫu tại `ung_dung/mo_dun/_mau/` để tham khảo cách tạo mô đun mới.
-- Mô đun thông thường có thể cài đặt, kích hoạt, tắt và gỡ cài đặt trong `/quan-ly-mo-dun`.
-- Khi tải lên mô đun `.zip`, hệ thống chỉ chấp nhận gói hợp lệ và không tự động kích hoạt ngay sau khi tải lên.
-- Việc gỡ cài đặt mô đun cần được thực hiện cẩn trọng, vì dữ liệu và mã nguồn mô đun có thể bị xóa theo luồng hệ thống.
+- Mã nguồn mô đun nằm trong `ung_dung/mo_dun/`
+- Có sẵn thư mục mẫu `ung_dung/mo_dun/_mau/` để tham khảo khi tạo mô đun mới
+- Mô đun thông thường có thể được cài đặt, kích hoạt, tắt hoặc gỡ cài đặt trong giao diện quản lý mô đun
+- Mô đun tải lên bằng `.zip` không được tự động kích hoạt ngay sau khi tải lên
+- Nên kiểm tra kỹ mô đun từ bên thứ ba trước khi sử dụng trên môi trường thật
 
 ## Cấu trúc thư mục tổng quan
 
@@ -145,18 +147,22 @@ bee-frame/
 
 ## Lưu ý khi triển khai public
 
-- Không commit file `.env` thật, thông tin CSDL thật, token hoặc secret key.
-- Đặt `UNG_DUNG_DEBUG=false` khi đưa lên môi trường public.
-- Đổi `UNG_DUNG_MUOI` khỏi giá trị mặc định.
-- Kiểm tra quyền ghi cho `ung_dung/kho_luu/tam/`.
-- Thay đổi tài khoản quản trị mặc định nếu bạn import `du_lieu_mau.sql`.
-- Chỉ tải lên mô đun `.zip` từ nguồn đáng tin cậy.
-- Đảm bảo web server chỉ public thư mục `cong_khai/`.
+- Không commit file `.env` thật, thông tin CSDL thật, token hoặc secret key
+- Đặt `UNG_DUNG_DEBUG=false` trên môi trường public
+- Thay `UNG_DUNG_MUOI` khỏi giá trị mặc định
+- Kiểm tra quyền ghi cho `ung_dung/kho_luu/tam/`
+- Không giữ nguyên dữ liệu hoặc tài khoản mẫu trên môi trường production
+- Chỉ public thư mục `cong_khai/` qua web server
+- Chỉ cài mô đun từ nguồn đáng tin cậy
 
 ## Đóng góp
 
-Bạn nên tạo branch riêng cho mỗi thay đổi, mô tả rõ phạm vi sửa và tránh đưa file cấu hình thật vào pull request.
+Nếu muốn đóng góp:
+
+- Tạo branch riêng cho thay đổi của bạn
+- Mô tả rõ mục tiêu chỉnh sửa
+- Không đưa file cấu hình thật hoặc dữ liệu nhạy cảm vào commit/pull request
 
 ## License
 
-Repository hiện chưa kèm file `LICENSE`. Nếu bạn public hoặc phân phối tiếp, hãy bổ sung license phù hợp trước khi sử dụng theo phạm vi rộng hơn.
+Repository hiện chưa kèm file `LICENSE`. Nếu bạn dự định chia sẻ rộng rãi hoặc cho phép bên khác tái sử dụng, nên bổ sung license phù hợp.
