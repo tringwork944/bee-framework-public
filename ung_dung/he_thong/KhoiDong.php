@@ -10,6 +10,8 @@ class KhoiDong
         Phien::batDau();
 
         $boNap = new BoNapMoDun();
+        $boNapGiaoDien = new BoNapGiaoDien();
+        $boNapGiaoDien->nap();
         $duLieuMoDun = $boNap->nap();
         $router = new BoDinhTuyen();
         $xacThuc = new XacThuc();
@@ -19,6 +21,8 @@ class KhoiDong
         $quanLyGiaoDien = new QuanLyGiaoDien($quanLyMenu, $quanLyTaiNguyen);
         $yeuCau = new YeuCau();
         $quanLyMenu->dongBoMenuTuMoDun($duLieuMoDun['tat_ca_mo_dun'] ?? []);
+        $this->napBootstrapMoDunDangBat($duLieuMoDun['mo_dun'] ?? []);
+        SuKien::goiHanhDong('he_thong.khoi_dong');
 
         foreach ($duLieuMoDun['tuyen'] as $tuyen) {
             $router->dangKy($tuyen['phuong_thuc'], $tuyen['duong_dan'],
@@ -49,5 +53,19 @@ class KhoiDong
         }
 
         $router->xuLy($yeuCau);
+    }
+
+    private function napBootstrapMoDunDangBat(array $moDunDangBat): void
+    {
+        foreach ($moDunDangBat as $ma => $cauHinh) {
+            $duongDan = GOC_DU_AN . '/ung_dung/mo_dun/' . $ma . '/mo_dun.php';
+            if (!is_file($duongDan)) {
+                continue;
+            }
+            $thucThi = require $duongDan;
+            if (is_callable($thucThi)) {
+                $thucThi($cauHinh);
+            }
+        }
     }
 }

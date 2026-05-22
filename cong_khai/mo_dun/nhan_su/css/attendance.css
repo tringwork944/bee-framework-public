@@ -1,0 +1,122 @@
+.attendance-card {
+  border: 1px solid var(--tblr-border-color);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .04);
+}
+
+.attendance-toolbar .form-control,
+.attendance-toolbar .form-select {
+  min-height: 32px;
+}
+
+.attendance-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+
+.attendance-legend .badge {
+  font-size: .72rem;
+  font-weight: 500;
+}
+
+.attendance-matrix-wrap {
+  overflow: auto;
+  max-width: 100%;
+}
+
+.attendance-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 1120px;
+}
+
+.attendance-table th,
+.attendance-table td {
+  border-bottom: 1px solid var(--tblr-border-color);
+  border-right: 1px solid var(--tblr-border-color-translucent);
+  padding: .3rem .35rem;
+  white-space: nowrap;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.attendance-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--tblr-bg-surface-secondary);
+}
+
+.attendance-col-employee {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  min-width: 260px;
+  text-align: left !important;
+  background: var(--tblr-bg-surface);
+}
+
+.attendance-col-total {
+  position: sticky;
+  right: 0;
+  z-index: 3;
+  min-width: 94px;
+  background: var(--tblr-bg-surface);
+}
+
+.attendance-head-left,
+.attendance-head-right {
+  z-index: 4 !important;
+}
+
+.attendance-day-col {
+  min-width: 44px;
+}
+
+.attendance-cell a {
+  color: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 999px;
+}
+
+.attendance-cell a:hover {
+  background: var(--tblr-bg-surface-secondary);
+}
+
+.attendance-row:hover td {
+  background: rgba(var(--tblr-primary-rgb), .03);
+}
+
+.employee-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--tblr-primary);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .72rem;
+  font-weight: 700;
+}
+
+.attendance-table th.weekend-saturday,
+.attendance-table td.weekend-saturday {
+  background: rgba(var(--tblr-blue-rgb), .14) !important;
+  color: var(--tblr-blue) !important;
+}
+
+.attendance-table th.weekend-sunday,
+.attendance-table td.weekend-sunday {
+  background: rgba(var(--tblr-red-rgb), .14) !important;
+  color: var(--tblr-red) !important;
+}
+
+.today-column {
+  box-shadow: inset 0 0 0 1px rgba(var(--tblr-primary-rgb), .45);
+}

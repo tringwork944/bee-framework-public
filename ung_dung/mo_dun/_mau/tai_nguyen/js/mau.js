@@ -1,3 +1,4 @@
-﻿(function () {
-    // File mau JS cho module. Co the bo sung ham khoi tao tai day.
-})();
+﻿// JS mau cho module _mau
+document.addEventListener('DOMContentLoaded', function () {
+    // TODO: them logic JS cho module moi
+});

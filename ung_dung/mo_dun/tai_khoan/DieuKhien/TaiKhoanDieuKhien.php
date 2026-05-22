@@ -45,6 +45,53 @@ class TaiKhoanDieuKhien
         ]);
     }
 
+    public static function formThem(?YeuCau $yeuCau = null, array $thamSo = []): void
+    {
+        $moHinh = new TaiKhoanMoHinh();
+        $GLOBALS['tieu_de_trang'] = 'Them tai khoan';
+        hien_thi_bo_cuc(GOC_DU_AN . '/ung_dung/mo_dun/tai_khoan/GiaoDien/them.php', [
+            'vaiTro' => $moHinh->layDanhSachVaiTro(),
+            'duLieu' => [],
+            'loiTheoTruong' => [],
+        ]);
+    }
+
+    public static function luuMoi(YeuCau $yeuCau, array $thamSo): void
+    {
+        $moHinh = new TaiKhoanMoHinh();
+        $hoTen = trim((string)$yeuCau->dauVao('ho_ten'));
+        $email = strtolower(trim((string)$yeuCau->dauVao('email')));
+        $matKhau = (string)$yeuCau->dauVao('mat_khau');
+        $vaiTroId = (int)$yeuCau->dauVao('vai_tro_id', 1);
+        $trangThai = (int)$yeuCau->dauVao('trang_thai', 1);
+        $loi = [];
+
+        if ($hoTen === '') $loi['ho_ten'] = 'Ho ten khong duoc de trong.';
+        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) $loi['email'] = 'Email khong hop le.';
+        if ($email !== '' && $moHinh->emailDaTonTai($email)) $loi['email'] = 'Email da ton tai.';
+        if (strlen($matKhau) < 8) $loi['mat_khau'] = 'Mat khau toi thieu 8 ky tu.';
+
+        if ($loi !== []) {
+            $GLOBALS['tieu_de_trang'] = 'Them tai khoan';
+            hien_thi_bo_cuc(GOC_DU_AN . '/ung_dung/mo_dun/tai_khoan/GiaoDien/them.php', [
+                'vaiTro' => $moHinh->layDanhSachVaiTro(),
+                'duLieu' => compact('hoTen', 'email', 'vaiTroId', 'trangThai'),
+                'loiTheoTruong' => $loi,
+            ]);
+            return;
+        }
+
+        $moHinh->taoTaiKhoan([
+            'ho_ten' => $hoTen,
+            'email' => $email,
+            'mat_khau' => password_hash($matKhau, PASSWORD_DEFAULT),
+            'vai_tro_id' => $vaiTroId,
+            'trang_thai' => $trangThai,
+        ]);
+        $_SESSION['_thong_bao'] = ['loai' => 'success', 'noi_dung' => 'Da tao tai khoan.'];
+        chuyen_huong('/tai-khoan');
+    }
+
     public static function luuSua(YeuCau $yeuCau, array $thamSo): void
     {
         $nguoiDung = $_SESSION['nguoi_dung'] ?? null;
@@ -140,4 +187,17 @@ class TaiKhoanDieuKhien
         chuyen_huong('/tai-khoan/sua/' . $id);
     }
 
+    public static function xoa(YeuCau $yeuCau, array $thamSo): void
+    {
+        $id = (int)($thamSo['id'] ?? 0);
+        $nguoiDung = $_SESSION['nguoi_dung'] ?? null;
+        if ($id <= 0 || !$nguoiDung || (int)$nguoiDung['id'] === $id) {
+            $_SESSION['_thong_bao'] = ['loai' => 'danger', 'noi_dung' => 'Khong the xoa tai khoan nay.'];
+            chuyen_huong('/tai-khoan');
+        }
+        $moHinh = new TaiKhoanMoHinh();
+        $moHinh->xoaTaiKhoan($id);
+        $_SESSION['_thong_bao'] = ['loai' => 'success', 'noi_dung' => 'Da xoa tai khoan.'];
+        chuyen_huong('/tai-khoan');
+    }
 }

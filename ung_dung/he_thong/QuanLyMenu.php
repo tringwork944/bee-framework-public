@@ -20,9 +20,13 @@ class QuanLyMenu
         foreach ($tatCaMoDun as $moDun) {
             if (!is_array($moDun) || empty($moDun['ma'])) continue;
             $maMoDun = (string)$moDun['ma'];
-            $trangThaiMoDun = !empty($moDun['kich_hoat']) ? 1 : 0;
+            $trangThaiKhaiBao = (string)($moDun['_trang_thai'] ?? '');
+            $trangThaiMoDun = $this->xacDinhTrangThaiMoDun($moDun);
             $this->capNhatTrangThaiMenuTheoMoDun($pdo, $maMoDun, $trangThaiMoDun);
 
+            if ($trangThaiKhaiBao === 'chua_cai_dat') {
+                continue;
+            }
             if (empty($moDun['menu'])) continue;
             $menus = $this->chuanHoaMenuSeed($moDun['menu']);
             foreach ($menus as $muc) {
@@ -70,7 +74,10 @@ class QuanLyMenu
         unset($item);
 
         $this->danhDauActive($root, rtrim($duongDanHienTai, '/') ?: '/');
-        return $this->gomNhomCaiDat($root);
+        $menu = $this->gomNhomCaiDat($root);
+        $menu = BoLoc::apDungBoLoc('menu.truoc_hien_thi', $menu, $nguoiDung, $duongDanHienTai);
+        SuKien::goiHanhDong('menu.sau_hien_thi', $menu, $nguoiDung, $duongDanHienTai);
+        return $menu;
     }
 
     private function chuanHoaMenuSeed(array $menu): array
@@ -101,8 +108,8 @@ class QuanLyMenu
 
     private function upsertMenu(PDO $pdo, array $muc, string $maMoDun, ?int $chaId, int $trangThai): void
     {
-        $sql = "INSERT INTO menu_he_thong (ma, mo_dun_ma, nhom, cha_id, tieu_de, bieu_tuong, duong_dan, quyen, thu_tu, hien_thi, trang_thai, ngay_cap_nhat)
-                VALUES (:ma, :mo_dun_ma, :nhom, :cha_id, :tieu_de, :bieu_tuong, :duong_dan, :quyen, :thu_tu, :hien_thi, :trang_thai, NOW())
+        $sql = "INSERT INTO menu_he_thong (ma, mo_dun_ma, nhom, cha_id, tieu_de, bieu_tuong, duong_dan, quyen, thu_tu, hien_thi, trang_thai, la_menu_he_thong, ngay_cap_nhat)
+                VALUES (:ma, :mo_dun_ma, :nhom, :cha_id, :tieu_de, :bieu_tuong, :duong_dan, :quyen, :thu_tu, :hien_thi, :trang_thai, :la_menu_he_thong, NOW())
                 ON DUPLICATE KEY UPDATE
                     mo_dun_ma = VALUES(mo_dun_ma),
                     nhom = VALUES(nhom),
@@ -114,12 +121,13 @@ class QuanLyMenu
                     thu_tu = VALUES(thu_tu),
                     hien_thi = VALUES(hien_thi),
                     trang_thai = VALUES(trang_thai),
+                    la_menu_he_thong = VALUES(la_menu_he_thong),
                     ngay_cap_nhat = NOW()";
         $stm = $pdo->prepare($sql);
         $stm->execute([
             'ma' => $muc['ma'],
             'mo_dun_ma' => $maMoDun,
-            'nhom' => $muc['nhom'],
+            'nhom' => $muc['nhom'] ?? 'nghiep_vu',
             'cha_id' => $chaId,
             'tieu_de' => $muc['tieu_de'],
             'bieu_tuong' => $muc['bieu_tuong'],
@@ -128,6 +136,7 @@ class QuanLyMenu
             'thu_tu' => $muc['thu_tu'],
             'hien_thi' => $muc['hien_thi'] ? 1 : 0,
             'trang_thai' => $trangThai,
+            'la_menu_he_thong' => in_array($maMoDun, self::MENU_LOI, true) ? 1 : 0,
         ]);
 
         $id = (int)$pdo->lastInsertId();
@@ -146,6 +155,15 @@ class QuanLyMenu
     {
         $stm = $pdo->prepare('UPDATE menu_he_thong SET trang_thai = :trang_thai, ngay_cap_nhat = NOW() WHERE mo_dun_ma = :mo_dun_ma');
         $stm->execute(['trang_thai' => $trangThai, 'mo_dun_ma' => $maMoDun]);
+    }
+
+    private function xacDinhTrangThaiMoDun(array $moDun): int
+    {
+        $trangThai = (string)($moDun['_trang_thai'] ?? '');
+        if ($trangThai !== '') {
+            return $trangThai === 'dang_bat' ? 1 : 0;
+        }
+        return !empty($moDun['kich_hoat']) ? 1 : 0;
     }
 
     private function chuanHoaIcon(string $icon): string

@@ -9,12 +9,18 @@
             <div class="col-md-6"><strong>Phien ban:</strong> <?= bao_mat_chuoi((string)($moDun['phien_ban'] ?: 'N/A')) ?></div>
             <div class="col-md-6"><strong>Tac gia:</strong> <?= bao_mat_chuoi((string)($moDun['tac_gia'] ?: 'N/A')) ?></div>
             <div class="col-12"><strong>Mo ta:</strong> <?= bao_mat_chuoi((string)($moDun['mo_ta'] ?: 'Khong co')) ?></div>
-            <div class="col-md-6"><strong>Kich hoat:</strong> <?= !empty($moDun['kich_hoat']) ? 'Dang bat' : 'Dang tat' ?></div>
-            <div class="col-md-6"><strong>Anh huong menu:</strong> <?= !empty($moDun['anh_huong_menu']) ? 'Co' : 'Khong' ?></div>
-            <div class="col-md-4"><strong>So route:</strong> <?= (int)$moDun['so_route'] ?></div>
-            <div class="col-md-4"><strong>So menu:</strong> <?= (int)$moDun['so_menu'] ?></div>
-            <div class="col-md-4"><strong>So quyen:</strong> <?= (int)$moDun['so_quyen'] ?></div>
-            <div class="col-12"><strong>Duong dan:</strong> <code><?= bao_mat_chuoi((string)$moDun['duong_dan']) ?></code></div>
+            <div class="col-md-6"><strong>Trang thai:</strong> <?= bao_mat_chuoi((string)$moDun['trang_thai']) ?></div>
+            <div class="col-md-6"><strong>Mo dun loi:</strong> <?= !empty($moDun['la_mo_dun_loi']) ? 'Co' : 'Khong' ?></div>
+            <div class="col-md-6"><strong>Loai:</strong> <?= bao_mat_chuoi((string)($moDun['loai'] ?? 'nghiep_vu')) ?></div>
+            <div class="col-md-6"><strong>Yeu cau PHP:</strong> <?= bao_mat_chuoi((string)($moDun['yeu_cau_php'] ?: 'N/A')) ?></div>
+            <div class="col-md-6"><strong>Yeu cau Core:</strong> <?= bao_mat_chuoi((string)($moDun['yeu_cau_core'] ?: 'N/A')) ?></div>
+            <div class="col-md-6"><strong>Phu thuoc:</strong> <?= bao_mat_chuoi(implode(', ', (array)$moDun['phu_thuoc'])) ?></div>
+            <div class="col-md-6"><strong>Legacy:</strong> <?= !empty($moDun['legacy']) ? 'Co' : 'Khong' ?></div>
+            <div class="col-12"><strong>Loi:</strong> <?= bao_mat_chuoi((string)($moDun['loi'] ?: 'Khong co')) ?></div>
         </div>
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-outline-secondary" href="/quan-ly-mo-dun">Quay lai</a>
+        <a class="btn btn-primary" href="/quan-ly-mo-dun/kiem-tra/<?= bao_mat_chuoi((string)$moDun['ma']) ?>">Kiem tra</a>
     </div>
 </div>

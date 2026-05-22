@@ -1,9 +1,7 @@
-﻿Tai nguyen Tabler da duoc chuan hoa theo cau truc vendor:
-- dist/vendor/tabler/tabler.css
-- dist/vendor/tabler/tabler.js
-- dist/vendor/tabler-icons/tabler-icons.css
-- dist/vendor/tabler-icons/fonts/*
+﻿Neu hosting/chay local chua co day du file Tabler, hay chep cac thu muc sau vao day:
+- dist/css/tabler.css
+- dist/js/tabler.js
+- dist/webfont/tabler-icons.css
+- dist/webfont/fonts/*
 
-Luu y ban quyen:
-- Khong chinh sua ma nguon vendor neu khong bat buoc.
-- Luon giu nguyen thong tin license va attribution goc.
+Khong dung CDN de dam bao chay on dinh tren shared hosting.

@@ -1,0 +1,1 @@
+-- Tong quan khong yeu cau bang rieng.

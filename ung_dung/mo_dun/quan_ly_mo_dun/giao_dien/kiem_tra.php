@@ -3,8 +3,8 @@
         <h3 class="card-title">Kiem tra cau truc mo dun: <?= bao_mat_chuoi((string)$maMoDun) ?></h3>
     </div>
     <div class="card-body">
-        <?php if (!empty($moDun)): ?>
-            <p class="mb-2">Ten mo dun: <strong><?= bao_mat_chuoi((string)$moDun['ten']) ?></strong></p>
+        <?php if (!empty($ketQua['mo_dun'])): ?>
+            <p class="mb-2">Ten mo dun: <strong><?= bao_mat_chuoi((string)$ketQua['mo_dun']['ten']) ?></strong></p>
         <?php endif; ?>
 
         <?php if (empty($ketQua['loi'])): ?>

@@ -23,7 +23,8 @@ function env(string $khoa, ?string $macDinh = null): ?string
 function hien_thi(string $tep, array $duLieu = []): void
 {
     extract($duLieu, EXTR_SKIP);
-    require GOC_DU_AN . '/ung_dung/giao_dien/' . ltrim($tep, '/');
+    $duongDan = \HeThong\QuanLyGiaoDien::giaiQuyetTepGiaoDien($tep);
+    require $duongDan;
 }
 
 function chuyen_huong(string $duongDan): never
@@ -75,12 +76,23 @@ function url_tai_nguyen(string $duongDan): string
 
 function hien_thi_bo_cuc(string $tepNoiDung, array $duLieu = [], ?string $boCuc = null): void
 {
-    extract($duLieu, EXTR_SKIP);
     $noiDung = $tepNoiDung;
     $boCuc = $boCuc ?? ($GLOBALS['bo_cuc_mac_dinh'] ?? 'chinh');
-    $tepBoCuc = GOC_DU_AN . '/ung_dung/giao_dien/bo_cuc/' . $boCuc . '.php';
-    if (!is_file($tepBoCuc)) {
-        $tepBoCuc = GOC_DU_AN . '/ung_dung/giao_dien/bo_cuc/chinh.php';
-    }
-    require $tepBoCuc;
+    \HeThong\QuanLyGiaoDien::renderLayout($boCuc, array_merge($duLieu, ['noiDung' => $noiDung]));
+}
+
+function render_layout(string $boCuc, array $duLieu = []): void
+{
+    \HeThong\QuanLyGiaoDien::renderLayout($boCuc, $duLieu);
+}
+
+function render_partial(string $partial, array $duLieu = []): void
+{
+    \HeThong\QuanLyGiaoDien::renderPartial($partial, $duLieu);
+}
+
+function co_quyen(?string $maQuyen): bool
+{
+    $nguoiDung = $_SESSION['nguoi_dung'] ?? null;
+    return (new \HeThong\KiemTraQuyen())->coQuyen($nguoiDung, $maQuyen);
 }

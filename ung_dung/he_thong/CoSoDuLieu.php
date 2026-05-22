@@ -13,15 +13,10 @@ class CoSoDuLieu
     public static function layKetNoi(): PDO
     {
         if (self::$ketNoi !== null) return self::$ketNoi;
-        $tenCoSoDuLieu = trim((string)env('DB_TEN', ''));
-        if ($tenCoSoDuLieu === '') {
-            http_response_code(500);
-            exit('Thieu cau hinh DB_TEN. Hay tao file .env tu .env.example va dien ten co so du lieu.');
-        }
         $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=%s',
             env('DB_MAY_CHU', '127.0.0.1'),
             env('DB_CONG', '3306'),
-            $tenCoSoDuLieu,
+            env('DB_TEN', ''),
             env('DB_BANG_MA', 'utf8mb4')
         );
         try {

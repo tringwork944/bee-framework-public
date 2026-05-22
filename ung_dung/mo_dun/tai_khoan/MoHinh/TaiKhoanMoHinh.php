@@ -38,6 +38,13 @@ class TaiKhoanMoHinh
         return (bool)$stm->fetchColumn();
     }
 
+    public function emailDaTonTai(string $email): bool
+    {
+        $stm = CoSoDuLieu::layKetNoi()->prepare('SELECT 1 FROM tai_khoan WHERE email = :email LIMIT 1');
+        $stm->execute(['email' => $email]);
+        return (bool)$stm->fetchColumn();
+    }
+
     public function capNhatChoAdmin(int $id, string $hoTen, int $trangThai): void
     {
         $stm = CoSoDuLieu::layKetNoi()->prepare('UPDATE tai_khoan SET ho_ten = :ho_ten, trang_thai = :trang_thai WHERE id = :id');
@@ -84,6 +91,24 @@ class TaiKhoanMoHinh
         $sql = 'UPDATE tai_khoan SET ' . implode(', ', $tap) . ' WHERE id = :id';
         $stm = CoSoDuLieu::layKetNoi()->prepare($sql);
         $stm->execute($thamSo);
+    }
+
+    public function taoTaiKhoan(array $duLieu): void
+    {
+        $stm = CoSoDuLieu::layKetNoi()->prepare('INSERT INTO tai_khoan (vai_tro_id, ho_ten, email, mat_khau, trang_thai, ngay_cap_nhat) VALUES (:vai_tro_id, :ho_ten, :email, :mat_khau, :trang_thai, NOW())');
+        $stm->execute([
+            'vai_tro_id' => (int)$duLieu['vai_tro_id'],
+            'ho_ten' => (string)$duLieu['ho_ten'],
+            'email' => (string)$duLieu['email'],
+            'mat_khau' => (string)$duLieu['mat_khau'],
+            'trang_thai' => (int)$duLieu['trang_thai'],
+        ]);
+    }
+
+    public function xoaTaiKhoan(int $id): void
+    {
+        $stm = CoSoDuLieu::layKetNoi()->prepare('DELETE FROM tai_khoan WHERE id = :id');
+        $stm->execute(['id' => $id]);
     }
 
     public function coCot(string $tenCot): bool

@@ -1,30 +1,35 @@
-﻿# Mo dun mau (_mau)
+# Mo dun mau (_mau)
 
-Thu muc `_mau` la template de ban copy khi tao mo dun custom moi.
+Thu muc `_mau` la bo khung theo chuan lifecycle mo dun moi.
+`_mau` khong phai mo dun loi (`la_mo_dun_loi = false`, `kich_hoat_mac_dinh = false`).
 
-## Cach su dung nhanh
-1. Copy thu muc: `ung_dung/mo_dun/_mau` -> `ung_dung/mo_dun/san_pham` (hoac ten khac).
-2. Doi ten file/class:
-   - `MauDieuKhien` -> class dieu khien moi
-   - `Mau` -> class mo hinh moi
-3. Cap nhat `cau_hinh.php`:
-   - `ma`, `ten`, `route`, `quyen`, `menu`, `tai_nguyen`
-   - Dat `kich_hoat` thanh `true` khi san sang su dung.
-4. Cap nhat view trong `giao_dien/` theo nhu cau.
-5. Tao bang CSDL cho module moi va cap nhat truy van trong `mo_hinh/`.
-6. Dong bo menu:
-   - He thong se tu dong dong bo menu seed tu `cau_hinh.php` vao `menu_he_thong` khi module duoc nap.
+## Quy trinh tao mo dun moi
+1. Copy `ung_dung/mo_dun/_mau` thanh `ung_dung/mo_dun/ten_mo_dun`.
+2. Doi `ma` trong `cau_hinh.php` dung dinh dang `^[a-z0-9_]+$`.
+3. Doi namespace/class trong `dieu_khien`, `mo_hinh`.
+4. Khai bao `route`, `menu`, `quyen`, `tai_nguyen`, `phu_thuoc` trong `cau_hinh.php`.
+5. Viet logic cho:
+- `cai_dat.php`
+- `kich_hoat.php`
+- `tat.php`
+- `go_cai_dat.php`
+6. Them cau truc/du lieu SQL trong:
+- `co_so_du_lieu/migration.sql`
+- `co_so_du_lieu/seed.sql`
+- `co_so_du_lieu/uninstall.sql`
+7. Cai dat va kich hoat trong admin `/quan-ly-mo-dun`.
 
-## Luu y quan trong
-- Thu muc bat dau bang `_` se bi `BoNapMoDun` bo qua, khong dang ky route/menu/quyen.
-- Vi vay `_mau` khong bao gio hoat dong nhu module that.
-- Sau khi copy, hay doi ten thu muc khong bat dau bang `_`.
+## Cau truc lifecycle
+- `mo_dun.php`: bootstrap dang ky SuKien/BoLoc.
+- `cau_hinh.php`: metadata + route/menu/quyen/tai_nguyen.
+- `cai_dat.php`: chay lan dau khi cai dat.
+- `kich_hoat.php`: chay moi lan kich hoat.
+- `tat.php`: chay khi tat.
+- `go_cai_dat.php`: chay khi go cai dat.
+- `co_so_du_lieu/uninstall.sql`: xoa du lieu rieng cua mo dun trong CSDL khi go cai dat.
 
-## Checklist doi ten
-- `ma` trong `cau_hinh.php`
-- namespace trong `dieu_khien/` va `mo_hinh/`
-- class controller/model
-- route URL (`/mau` -> URL moi)
-- quyen (`_mau.*` -> `san_pham.*`...)
-- menu seed (`ma`, `tieu_de`, `duong_dan`, `nhom`)
-- duong dan tai nguyen CSS/JS
+## Luu y
+- Thu muc bat dau bang `_` bi bo qua khi quet mo dun.
+- `_mau` la template, khong duoc nap nhu mo dun that.
+- Khi go cai dat, he thong se chay `uninstall.sql` neu tep ton tai.
+- Chi khai bao bang rieng cua mo dun trong `uninstall.sql`; khong drop bang loi cua he thong.
